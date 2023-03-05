@@ -63,7 +63,7 @@ my $dbh = DBI->connect("DBI:mysql:database=joomla;host=localhost",
                        $MYSQLUSER, $MYSQLPSWD,
                        {'RaiseError' => 1});
 
-my $table = $TABLEPREFIX."_osmembership_field_value";
+my $table = $TABLEPREFIX."_osmembership_subscribers";
 
 # print "table = '$table'\n";
 
@@ -75,21 +75,22 @@ open(OUTFH, '>', $MYOUTPUT) or die $!;
 while (my $ref = $sth->fetchrow_hashref())
 {
 	# print "Found a row: id = $ref->{'id'}, subscriber = $ref->{'subscriber_id'} name = $ref->{'field_value'}\n";
-	if ($ref->{'subscriber_id'} ne $curuser)
-	{
-		$curuser = $ref->{'subscriber_id'};
-	}
-	if ($ref->{'field_id'} == 31)
-	{
-		my $EmailAddress = $ref->{'field_value'};
-		print "Saw curuser = $curuser at $EmailAddress\n";
+	#if ($ref->{'subscriber_id'} ne $curuser)
+	#{
+	#	$curuser = $ref->{'subscriber_id'};
+	#}
+	#if ($ref->{'field_id'} == 21)
+	#{
+		my $EmailAddress = $ref->{'email'};
+		#print "Saw curuser = $curuser at $EmailAddress\n";
+		print "Saw $EmailAddress\n";
 		if(index($EmailAddress, "\@") == -1)
 		{
-			print "Was not a address\n";
+			print "$EmailAddress Was not a address\n";
 			next;
 		}
 		print (OUTFH "$EmailAddress\n");
-	}
+		#}
 }
 $sth->finish();
 
